@@ -16,6 +16,8 @@ public class MainViewModel : ObservableObject
 
     public ObservableCollection<ProfileViewModel> Profiles { get; } = new();
 
+    public bool HasProfiles => Profiles.Count > 0;
+
     private ProfileViewModel? _selected;
     public ProfileViewModel? Selected
     {
@@ -66,6 +68,8 @@ public class MainViewModel : ObservableObject
         ImportCommand = new RelayCommand(ImportAsync);
         ConnectToggleCommand = new RelayCommand(ToggleConnectionAsync, () => Selected != null);
         RemoveCommand = new RelayCommand(RemoveSelectedAsync, () => Selected != null && !Selected.IsConnected);
+
+        Profiles.CollectionChanged += (_, _) => Raise(nameof(HasProfiles));
 
         foreach (var profile in _store.Load())
         {

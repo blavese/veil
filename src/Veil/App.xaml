@@ -12,6 +12,8 @@
             <conv:TunnelStateToBrushConverter x:Key="TunnelStateToBrushConverter"/>
             <conv:BoolToConnectLabelConverter x:Key="BoolToConnectLabelConverter"/>
             <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

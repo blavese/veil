@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:Veil.ViewModels"
         Title="veil" Height="600" Width="920" MinHeight="520" MinWidth="760"
+        Background="{StaticResource BgBrush}" Foreground="{StaticResource TextBrush}"
         WindowStartupLocation="CenterScreen">
 
-    <Grid>
+    <Grid Background="{StaticResource BgBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="*"/>
@@ -74,16 +75,18 @@
 
         <!-- main panel -->
         <Grid Grid.Column="1">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Visibility="{Binding HasProfiles, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <Button Style="{StaticResource ConnectCircleButton}"
                         Command="{Binding ConnectToggleCommand}"
-                        Tag="{Binding Selected.State, Converter={StaticResource TunnelStateToBrushConverter}}">
-                    <TextBlock Text="{Binding Selected.IsConnected, Converter={StaticResource BoolToConnectLabelConverter}}"
+                        IsEnabled="{Binding Selected, Converter={StaticResource NullToBoolConverter}}"
+                        Tag="{Binding Selected.State, Converter={StaticResource TunnelStateToBrushConverter}, FallbackValue={StaticResource BorderBrush}}">
+                    <TextBlock Text="{Binding Selected.IsConnected, Converter={StaticResource BoolToConnectLabelConverter}, FallbackValue=Connect}"
                                FontSize="16" FontWeight="SemiBold"/>
                 </Button>
 
-                <TextBlock Text="{Binding Selected.StatusText}" FontSize="22" FontWeight="SemiBold"
+                <TextBlock Text="{Binding Selected.StatusText, FallbackValue=Disconnected}" FontSize="22" FontWeight="SemiBold"
                            HorizontalAlignment="Center" Margin="0,24,0,4"/>
 
                 <TextBlock Text="{Binding Selected.Name}" FontSize="14" Foreground="{StaticResource TextDimBrush}"
@@ -102,7 +105,8 @@
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <TextBlock Text="IP ADDRESS" FontSize="10" Foreground="{StaticResource TextDimBrush}"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding PublicIp}" FontSize="14" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        <TextBlock Text="{Binding PublicIp}" FontSize="14" HorizontalAlignment="Center" Margin="0,4,0,0"
+                                   Cursor="Hand" ToolTip="Click to copy" MouseLeftButtonUp="CopyIp_Click"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Center">
@@ -118,6 +122,18 @@
                                TextWrapping="Wrap" MaxWidth="380" TextAlignment="Center"/>
                 </Border>
 
+            </StackPanel>
+
+            <!-- shown until at least one config has been imported -->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="320"
+                        Visibility="{Binding HasProfiles, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}">
+                <TextBlock Text="No tunnels yet" FontSize="20" FontWeight="SemiBold"
+                           HorizontalAlignment="Center" Foreground="{StaticResource TextBrush}"/>
+                <TextBlock Text="Import a WireGuard .conf file to get started." FontSize="13"
+                           Foreground="{StaticResource TextDimBrush}" TextWrapping="Wrap"
+                           TextAlignment="Center" HorizontalAlignment="Center" Margin="0,8,0,20"/>
+                <Button Content="Import config" Style="{StaticResource PrimaryButton}"
+                        HorizontalAlignment="Center" Command="{Binding ImportCommand}"/>
             </StackPanel>
         </Grid>
 
