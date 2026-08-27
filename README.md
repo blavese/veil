@@ -2,6 +2,8 @@
 
 Minimal WireGuard client for Windows. Import a config, connect, done.
 
+**[Download the latest release](https://github.com/blavese/veil/releases/latest)**, run `Veil.exe`, allow the admin prompt. No .NET install needed, the runtime is bundled in. [WireGuard for Windows](https://www.wireguard.com/install/) needs to be installed separately, Veil drives it rather than replacing it.
+
 Not a VPN service. Doesn't ship servers or keys. Point it at any WireGuard config (your own server, a provider's config export, whatever) and it manages the tunnel for you.
 
 ## features
